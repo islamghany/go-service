@@ -1,0 +1,2 @@
+{"time":"2024-03-08T19:56:20.412864671+02:00","level":"INFO","file":"main.go:42","msg":"startup","service":"sales-api","GOMAXPROCS":4,"trace_id":"00000000-0000-0000-0000-000000000000"}
+{"time":"2024-03-08T19:56:35.871558677+02:00","level":"INFO","file":"main.go:42","msg":"startup","service":"sales-api","GOMAXPROCS":4,"trace_id":"00000000-0000-0000-0000-000000000000"}

@@ -26,9 +26,9 @@ func main() {
 		return "00000000-0000-0000-0000-000000000000"
 	}
 	log := logger.NewWithEvents(os.Stdout, logger.LevelInfo, "sales-api", tracerIDFn, loggerEvents)
-
 	// -----------------------------------------------------------
 	ctx := context.Background()
+	log.Debug(ctx, "main", "startup", "main is started")
 	if err := run(ctx, log); err != nil {
 		log.Error(ctx, "startup", "msg", err)
 		os.Exit(1)

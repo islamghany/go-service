@@ -18,8 +18,18 @@ func init() {
 	flag.StringVar(&service, "service", "", "filter which service to see")
 }
 
+const logFile = "./logFile.jsonl"
+
 func main() {
 	flag.Parse()
+	// open file, if not exist create new one
+	file, err := os.OpenFile(logFile, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+
+	defer file.Close()
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	var b strings.Builder
 
 	service := strings.ToLower(service)
@@ -47,6 +57,8 @@ func main() {
 		if v, ok := m["trace_id"]; ok {
 			traceID = fmt.Sprintf("%v", v)
 		}
+		// append jsonl file
+		file.WriteString(s + "\n")
 
 		// {"time":"2023-06-01T17:21:11.13704718Z","level":"INFO","msg":"startup","service":"SALES-API","GOMAXPROCS":1}
 
