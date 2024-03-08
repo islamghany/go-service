@@ -11,6 +11,8 @@ import (
 	"github.com/islamghany/service/foundation/logger"
 )
 
+var build = "develop"
+
 func main() {
 	// ----------------------------------------------------------
 	// intialize the logger
@@ -39,7 +41,7 @@ func run(ctx context.Context, log *logger.Logger) error {
 
 	// -----------------------------------------------------------
 	// GOMAXPROCS
-	log.Info(ctx, "startup", "GOMAXPROCS", runtime.GOMAXPROCS(0))
+	log.Info(ctx, "startup", "GOMAXPROCS", runtime.GOMAXPROCS(0), "build", build)
 
 	// -----------------------------------------------------------
 	// Shutdown
