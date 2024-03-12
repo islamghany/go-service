@@ -141,3 +141,9 @@ tidy:
 
 deps-list:
 	go list -m -u -mod=readonly all
+
+# ==============================================================================
+# Metrics and Tracing
+
+metrics-view-sc:
+	expvarmon -ports="localhost:4000" -vars="build,requests,goroutines,errors,panics,mem:memstats.HeapAlloc,mem:memstats.HeapSys,mem:memstats.Sys"
