@@ -22,3 +22,20 @@ spec:
       containers:
         - name: sales-api
           image: service-image
+
+          ports:
+            - containerPort: 8000
+              name: sales-api
+            - containerPort: 4000
+              name: sales-api-debug
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sales-api
+  namespace: sales-system
+
+spec:
+  selector:
+    app: sales
