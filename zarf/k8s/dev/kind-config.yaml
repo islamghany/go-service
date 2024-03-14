@@ -4,8 +4,8 @@ nodes:
   - role: control-plane
     extraPortMappings:
       # Sales-Api
-      - containerPort: 3000
-        hostPort: 3000
+      - containerPort: 8000
+        hostPort: 8000
       # Sales-Api debug
       - containerPort: 4000
         hostPort: 4000

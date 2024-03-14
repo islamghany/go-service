@@ -8,6 +8,9 @@ run:
 run-help:
 	go run app/services/sales-api/main.go --help | go run app/tooling/logfmt/main.go
 
+health:
+	curl -it http://localhost:8000/v1/health
+	
 GOLANG          := golang:1.22
 ALPINE          := alpine:3.19
 KIND            := kindest/node:v1.29.2

@@ -13,6 +13,8 @@ import (
 	"time"
 
 	"github.com/ardanlabs/conf/v3"
+	"github.com/islamghany/service/app/services/sales-api/v1/handlers"
+	v1 "github.com/islamghany/service/business/web/v1"
 	"github.com/islamghany/service/business/web/v1/debug"
 	"github.com/islamghany/service/foundation/logger"
 )
@@ -108,9 +110,16 @@ func run(ctx context.Context, log *logger.Logger) error {
 	// signal.Notify() and will retain their default behavior.
 	signal.Notify(shutdown, syscall.SIGINT, syscall.SIGTERM)
 
+	cfgMux := v1.APIMuxConfig{
+		Build:    build,
+		Shutdown: shutdown,
+		Log:      log,
+	}
+	apiMux := v1.APIMux(cfgMux, handlers.Routes{})
+
 	api := http.Server{
 		Addr:         cfg.Web.APIHost,
-		Handler:      nil,
+		Handler:      apiMux,
 		ReadTimeout:  cfg.Web.ReadTimeout,
 		WriteTimeout: cfg.Web.WriteTimeout,
 		IdleTimeout:  cfg.Web.IdleTimeout,
