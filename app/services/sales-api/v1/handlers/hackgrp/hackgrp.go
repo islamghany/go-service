@@ -2,8 +2,9 @@ package hackgrp
 
 import (
 	"context"
-	"encoding/json"
 	"net/http"
+
+	"github.com/islamghany/service/foundation/web"
 )
 
 func Hack(ctx context.Context, w http.ResponseWriter, r *http.Request) error {
@@ -14,5 +15,5 @@ func Hack(ctx context.Context, w http.ResponseWriter, r *http.Request) error {
 		Status: "OK",
 	}
 
-	return json.NewEncoder(w).Encode(status)
+	return web.Respond(ctx, w, status, http.StatusOK)
 }
