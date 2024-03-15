@@ -17,6 +17,7 @@ import (
 	v1 "github.com/islamghany/service/business/web/v1"
 	"github.com/islamghany/service/business/web/v1/debug"
 	"github.com/islamghany/service/foundation/logger"
+	"github.com/islamghany/service/foundation/web"
 )
 
 var build = "develop"
@@ -30,7 +31,7 @@ func main() {
 		},
 	}
 	tracerIDFn := func(ctx context.Context) string {
-		return "00000000-0000-0000-0000-000000000000"
+		return web.GetTraceID(ctx)
 	}
 	log := logger.NewWithEvents(os.Stdout, logger.LevelInfo, "sales-api", tracerIDFn, loggerEvents)
 	// -----------------------------------------------------------

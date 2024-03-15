@@ -4,8 +4,10 @@ import (
 	"context"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/dimfeld/httptreemux/v5"
+	"github.com/google/uuid"
 )
 
 type Handler func(ctx context.Context, w http.ResponseWriter, r *http.Request) error
@@ -30,8 +32,12 @@ func (a *App) Handle(method, path string, handler Handler, mw ...Middleware) {
 
 	h := func(w http.ResponseWriter, r *http.Request) {
 		// Add any Logging, Tracing, or Metrics here. For example, we could wrap the
-
-		if err := handler(r.Context(), w, r); err != nil {
+		v := Values{
+			TraceID: uuid.NewString(),
+			Now:     time.Now().UTC(),
+		}
+		ctx := SetValues(r.Context(), &v)
+		if err := handler(ctx, w, r); err != nil {
 			// Log the error.
 			return
 		}
