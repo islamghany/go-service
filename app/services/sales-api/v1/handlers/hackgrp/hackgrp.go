@@ -13,6 +13,7 @@ import (
 func Hack(ctx context.Context, w http.ResponseWriter, r *http.Request) error {
 
 	if n := rand.Intn(100) % 2; n%2 == 0 {
+		panic("untrusted error")
 		return respond.NewError(errors.New("trusted error"), http.StatusUnprocessableEntity)
 	}
 	status := struct {

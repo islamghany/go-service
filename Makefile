@@ -10,6 +10,9 @@ run-help:
 
 hack:
 	curl -il http://localhost:8000/hack
+
+load:
+	hey -m GET -c 100 -n 100000 "http://localhost:8000/hack"
 	
 GOLANG          := golang:1.22
 ALPINE          := alpine:3.19
