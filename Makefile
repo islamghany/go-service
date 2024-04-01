@@ -2,6 +2,10 @@
 SHELL_PATH = /bin/ash
 SHELL = $(if $(wildcard $(SHELL_PATH)),/bin/ash,/bin/bash)
 
+# RSA Keys
+# 	To generate a private/public key PEM file.
+# 	$ openssl genpkey -algorithm RSA -out private.pem -pkeyopt rsa_keygen_bits:2048
+# 	$ openssl rsa -pubout -in private.pem -out public.pem
 run:
 	go run app/services/sales-api/main.go | go run app/tooling/logfmt/main.go
 
@@ -13,7 +17,9 @@ hack:
 
 load:
 	hey -m GET -c 100 -n 100000 "http://localhost:8000/hack"
-	
+admin:
+	go run app/tooling/sales-admin/main.go
+
 GOLANG          := golang:1.22
 ALPINE          := alpine:3.19
 KIND            := kindest/node:v1.29.2
@@ -84,6 +90,8 @@ dev-up:
 		--config zarf/k8s/dev/kind-config.yaml
 
 	kubectl wait --timeout=120s --namespace=local-path-storage --for=condition=Available deployment/local-path-provisioner
+	
+	kind load docker-image $(POSTGRES) --name $(KIND_CLUSTER)
 
 dev-down:
 	kind delete cluster --name $(KIND_CLUSTER)
@@ -106,6 +114,8 @@ dev-apply:
 	kustomize build zarf/k8s/dev/sales | kubectl apply -f -
 	kubectl wait pods --namespace=$(NAMESPACE) --selector app=$(APP) --timeout=120s --for=condition=Ready
 
+	kustomize build zarf/k8s/dev/sales | kubectl apply -f -
+	kubectl wait pods --namespace=$(NAMESPACE) --selector app=$(APP) --timeout=120s --for=condition=Ready
 dev-restart:
 	kubectl rollout restart deployment $(APP) --namespace=$(NAMESPACE)
 
@@ -133,6 +143,11 @@ dev-describe-deployment:
 dev-describe-sales:
 	kubectl describe pod --namespace=$(NAMESPACE) -l app=$(APP)
 
+dev-logs-db:
+	kubectl logs --namespace=$(NAMESPACE) -l app=database --all-containers=true -f --tail=100
+
+pgcli:
+	pgcli postgresql://postgres:postgres@localhost
 # ==============================================================================
 # Modules support
 

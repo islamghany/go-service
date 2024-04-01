@@ -6,6 +6,7 @@ import (
 
 	"github.com/islamghany/service/business/web/v1/respond"
 	"github.com/islamghany/service/foundation/logger"
+	"github.com/islamghany/service/foundation/validate"
 	"github.com/islamghany/service/foundation/web"
 )
 
@@ -21,6 +22,16 @@ func Errors(log *logger.Logger) web.Middleware {
 				// trusted  error
 				case respond.IsError(err):
 					reqErr := respond.GetError(err)
+					if validate.IsFieldErrors(reqErr.Err) {
+						fieldErrors := validate.GetFieldErrors(reqErr.Err)
+						er = respond.ErrorDocument{
+							Error:  "data validation error",
+							Fields: fieldErrors.Fields(),
+						}
+						status = reqErr.Status
+						break
+					}
+
 					er = respond.ErrorDocument{
 						Error: reqErr.Error(),
 					}
